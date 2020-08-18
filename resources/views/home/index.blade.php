@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Laravel</title>
 
@@ -38,34 +39,30 @@
     <script type="text/javascript">
 
         var mediaData = ['http://localhost/mp3/The%20Chainsmokers%20-%20Closer%20(%20cover%20by%20J.Fla%20).mp3','http://localhost/mp3/%e4%ba%ba%e4%ba%ba%e2%80%9c%e5%a4%aa%e6%a5%b5%e6%8b%b3%e2%80%9d%e5%90%88%e8%bc%af%e7%86%8a%e4%bb%94%e3%80%90Riyoko(%e5%a5%bd%e5%8f%8b%e5%b7%b2%e6%bb%bf)%e3%80%91Official%20Music%20video.mp3'];
-        // var audio = new Audio('http://localhost/mp3/The%20Chainsmokers%20-%20Closer%20(%20cover%20by%20J.Fla%20).mp3');
-        // audio.addEventListener('ended',function(){
-        //     audio = new Audio('http://localhost/mp3/%e4%ba%ba%e4%ba%ba%e2%80%9c%e5%a4%aa%e6%a5%b5%e6%8b%b3%e2%80%9d%e5%90%88%e8%bc%af%e7%86%8a%e4%bb%94%e3%80%90Riyoko(%e5%a5%bd%e5%8f%8b%e5%b7%b2%e6%bb%bf)%e3%80%91Official%20Music%20video.mp3');
-        // },false);
-        // audio.loop = true;
+
         var player = new MP3Player();
         player.addNewMusic('http://localhost/mp3/001.mp3');
         player.addNewMusic('http://localhost/mp3/002.mp3');
 
         player.start();
+
         // new MP3Player();
         $(document).on('click','#player_play',function () {
             player.PlayorPause();
-            player.printQueueData();
-            player.playModel('go');
-
         })
-        window.setInterval(function(){
-            console.log(player.getCurrentProgressPrecent());
-        },500);
-        // var htmlX;
-        // var playerDefaultX;
-        // var playerClickX;
-        // var playerClickPer;
-        // var divX;
-        // var player_play = $('#musicPlayer_Progress_bg');
-        // var click = false;
-        // //change audio currentTime
+        $(document).on('click','#playerMode',function () {
+            player.playMode('go');
+        })
+        $(document).on('click','#playerMode2',function () {
+            player.playMode('loop');
+        });
+        player.on('build',()=>{
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+        });
+        // window.setInterval(function(){
+        //     console.log(player.aaaaa());
+        // },500);
+        //change audio currentTime
         // $(document).on('mousedown','#musicPlayer_Progress_bg', function(e){
         //     playerProgressBarCoordinate(e);
         //     click = true;
@@ -87,6 +84,13 @@
         //     }
         //
         // })
+        // var htmlX;
+        // var playerDefaultX;
+        // var playerClickX;
+        // var playerClickPer;
+        // var divX;
+        // var player_play = $('#musicPlayer_Progress_bg');
+        // var click = false;
         // function playerProgressBarCoordinate(e){
         //     playerDefaultX = $('#musicPlayer_Progress').offset().left;
         //     playerClickX = e.clientX - playerDefaultX;
@@ -106,8 +110,7 @@
         //     // console.log("目前時間:"+audio.currentTime);
         //     // console.log("總長度:"+(audio.duration/60)+"分"+(audio.duration%60)+"秒");
         // },100);
-        // audioEle.play();    //播放
-        // audioEle.pause();    //暂停
+
     </script>
     @include('home.music_player')
 

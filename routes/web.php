@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/', 'MusicController@index');
+//    Route::get('/{name}',function(){
+//        return view('/personalPage/main');
+//    })->name('personalPage');
 });
+//Route::POST('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Auth::routes();
 

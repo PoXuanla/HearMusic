@@ -1,5 +1,5 @@
 <div style="position: fixed;background-color: white;bottom: 0;width:25%;
-  right: 0;border-radius: 10px;overflow: hidden;">
+  right: 0;border-radius: 10px;overflow: hidden;     z-index: 1;">
     <div>
         <div  id="musicPlayer_Progress_bg" style="position:relative;width: 100%; height:5px; background-color: grey; cursor: pointer">
                     <div id="musicPlayer_Progress" style="position:absolute;top: 0;left: 0; width:0%;height:5px; background-color: red;"></div>
@@ -14,7 +14,8 @@
         </div>
         <div>
             <button  id="player_play" class="btn btn-danger"><i class="fas fa-play-circle"></i></button>
-            <button class="btn btn-danger"><i class="fas fa-bars"></i></button>
+            <button id = "playerMode" class="btn btn-danger"><i class="fas fa-bars"></i></button>
+            <button id = "playerMode2" class="btn btn-danger"><i class="fas fa-bars"></i></button>
 
         </div>
     </div>

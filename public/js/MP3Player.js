@@ -1,44 +1,48 @@
 class MP3Player{
+    mode = 'loop';
 
     constructor() {
         this.musicQueue = new Array();
+        this.currentPlayingIndex ;
+        this.event = new Event('build');
+
+        // this.start();
+    }
+
+    start(){
+        this.audio = new Audio(this.musicQueue[0]);
+        this.audio.currentTime = 7;
+        console.log("is start");
+    }
+
+    Audio(){
+        return this.audio;
+
+    }
+    on(event, callback) {
+        this.audio.addEventListener(event, callback);
+    }
+    playMode(mode){
+
+        this.audio.dispatchEvent(this.event);
+        console.log("ff");
     }
     addNewMusic(url){
         this.musicQueue.push(url);
-    }
-    printQueueData(){
-        console.log(this.musicQueue);
-    }
-    playModel(model){
-        if(model === 'return'){
-            this.audio.loop = true;
-        }else if(model === 'go'){
-            let musicQueue = this.musicQueue;
-            let audio = this.audio;
-            this.audio.addEventListener('ended',myhandler,false);
-            function myhandler() {
-                musicQueue.shift();
-                audio.src = musicQueue[0];
-                audio.play();
-                audio.loop = true;
-                console.log(musicQueue[0]);
-            }
-        }
-    }
-    start(){
-        this.audio = new Audio(this.musicQueue[0]);
-        // this.audio.play();
     }
     PlayorPause(){
         if(!this.audio.paused){
             this.audio.pause();
         }else{
             this.audio.play();
+
         }
     }
-    getCurrentProgressPrecent(){
+    CurrentProgressPrecent(){
         let player_progress = (this.audio.currentTime/this.audio.duration)*100 + '%';
         return player_progress;
     }
 
+
 }
+

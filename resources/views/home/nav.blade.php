@@ -25,11 +25,46 @@
             <li class="nav-item">
                 <a class="nav-link " href="#">App</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link " href="#">App</a>
+            </li>
         </ul>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
         <form class="form-inline my-2 my-lg-0">
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ url('/home') }}" class="btn btn-outline-success my-2 my-sm-0" >{{ Auth::user()->name }}</a>
+{{--                    <a href="{{ url('/home') }}" class="btn btn-outline-success my-2 my-sm-0" >{{ Auth::user()->name }}</a>--}}
+                    <div class="dropdown">
+                        <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{Auth::user()->name}}zz
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                      document.getElementById('logout-form').submit();
+                                       ">
+                                {{ __('Logout') }}
+                            </a>
+
+
+                        </div>
+{{--                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">--}}
+{{--                            <a class="dropdown-item" href="{{ url('/'.Auth::user()->name) }}">我的音樂庫</a>--}}
+{{--                            <a class="dropdown-item" href="#">個人頁面</a>--}}
+{{--                            <a  class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">--}}
+{{--                                Logout--}}
+{{--                            </a>--}}
+
+{{--                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">--}}
+{{--                                {{ csrf_field() }}--}}
+{{--                            </form>--}}
+
+
+
+{{--                        </div>--}}
+                    </div>
                 @else
                     <a href="{{ route('login') }}" class="btn btn-success my-2 my-sm-0" style="margin-right: 1rem;">login</a>
                     @if (Route::has('register'))
