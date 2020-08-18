@@ -1,6 +1,6 @@
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="padding: 2rem;">
-    <a class="navbar-brand" href="#">Music</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="padding: 2rem; ">
+    <a class="navbar-brand" href="{{route('home')}}">Music</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -38,12 +38,15 @@
 {{--                    <a href="{{ url('/home') }}" class="btn btn-outline-success my-2 my-sm-0" >{{ Auth::user()->name }}</a>--}}
                     <div class="dropdown">
                         <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{Auth::user()->name}}zz
+                            {{Auth::user()->name}}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{url(Auth::user()->name)}}">
+                                個人頁面
+                            </a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
-                                                      document.getElementById('logout-form').submit();
+                                document.getElementById('logout-form').submit();
                                        ">
                                 {{ __('Logout') }}
                             </a>

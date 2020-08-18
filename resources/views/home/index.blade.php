@@ -19,7 +19,7 @@
 
 </head>
 <body>
-@include('home.nav')
+@include('nav')
 @include('home.carousel')
 <div class="d-flex justify-content-between"style="padding:5px; margin: 2rem;">
     <div class="card" style="text-align: center;margin: 0 auto; padding: 2rem; height: 90%; width:30rem;

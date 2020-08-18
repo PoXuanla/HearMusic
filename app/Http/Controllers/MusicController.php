@@ -21,7 +21,6 @@ class MusicController extends Controller
         foreach ($TopTenMusic as $mu){
             $object = new \stdClass();
             $object->name = $mu->name;
-            $object->user_name = Auth::user()->name;
             $object->image = $mu->image;
             array_push($musics,$object);
         }

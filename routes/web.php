@@ -14,14 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth'])->group(function() {
-    Route::get('/', 'MusicController@index');
-//    Route::get('/{name}',function(){
-//        return view('/personalPage/main');
-//    })->name('personalPage');
-});
 //Route::POST('/logout', 'Auth\LoginController@logout')->name('logout');
-
+Route::get('/', 'MusicController@index')->name('home');
+Route::get('/{name}',function(){
+    return view('/personalPage/main');
+})->name('personalPage');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
