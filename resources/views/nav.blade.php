@@ -1,7 +1,8 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark r" style="padding: 2rem; ">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="padding: 2rem; ">
     <a class="navbar-brand" href="{{route('home')}}">Music</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -35,14 +36,18 @@
         <form class="form-inline my-2 my-lg-0">
             @if (Route::has('login'))
                 @auth
-{{--                    <a href="{{ url('/home') }}" class="btn btn-outline-success my-2 my-sm-0" >{{ Auth::user()->name }}</a>--}}
+                    {{--                    <a href="{{ url('/home') }}" class="btn btn-outline-success my-2 my-sm-0" >{{ Auth::user()->name }}</a>--}}
                     <div class="dropdown">
-                        <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{Auth::user()->name}}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{url(Auth::user()->name)}}">
                                 個人頁面
+                            </a>
+                            <a class="dropdown-item" href="{{route('accountSetting')}}">
+                                帳號設定
                             </a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
@@ -53,30 +58,30 @@
 
 
                         </div>
-{{--                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">--}}
-{{--                            <a class="dropdown-item" href="{{ url('/'.Auth::user()->name) }}">我的音樂庫</a>--}}
-{{--                            <a class="dropdown-item" href="#">個人頁面</a>--}}
-{{--                            <a  class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">--}}
-{{--                                Logout--}}
-{{--                            </a>--}}
+                        {{--                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">--}}
+                        {{--                            <a class="dropdown-item" href="{{ url('/'.Auth::user()->name) }}">我的音樂庫</a>--}}
+                        {{--                            <a class="dropdown-item" href="#">個人頁面</a>--}}
+                        {{--                            <a  class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">--}}
+                        {{--                                Logout--}}
+                        {{--                            </a>--}}
 
-{{--                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">--}}
-{{--                                {{ csrf_field() }}--}}
-{{--                            </form>--}}
+                        {{--                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">--}}
+                        {{--                                {{ csrf_field() }}--}}
+                        {{--                            </form>--}}
 
 
 
-{{--                        </div>--}}
+                        {{--                        </div>--}}
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-success my-2 my-sm-0" style="margin-right: 1rem;">login</a>
+                    <a href="{{ route('login') }}" class="btn btn-success my-2 my-sm-0" style="margin-right: 1rem;">Login</a>
                     @if (Route::has('register'))
-                        <a href="{{ route('login') }}" class="btn btn-success my-2 my-sm-0" >register</a>
-                    @endif
-                @endauth
-                </div>
-            @endif
-        </form>
+                        <a href="{{ route('register') }}" class="btn btn-success my-2 my-sm-0">Register</a>
+        @endif
+        @endauth
+    </div>
+    @endif
+    </form>
     </div>
 </nav>
 

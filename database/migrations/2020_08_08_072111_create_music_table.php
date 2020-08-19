@@ -20,6 +20,7 @@ class CreateMusicTable extends Migration
             $table->string('introduction');
             $table->string('mp3');
             $table->string('lyric');
+            $table->integer('like');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
