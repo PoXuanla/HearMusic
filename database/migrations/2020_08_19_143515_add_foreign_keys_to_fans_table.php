@@ -30,8 +30,8 @@ class AddForeignKeysToFansTable extends Migration
         Schema::table('fans', function (Blueprint $table) {
             //
 
-            $table->dropForeign('user_id');
-            $table->dropForeign('fan_id');
+            $table->dropForeign(['user_id']);
+            $table->dropForeign(['fan_id']);
         });
     }
 }

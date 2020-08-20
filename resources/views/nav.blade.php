@@ -46,7 +46,7 @@
                             <a class="dropdown-item" href="{{url(Auth::user()->name)}}">
                                 個人頁面
                             </a>
-                            <a class="dropdown-item" href="{{route('accountSetting')}}">
+                            <a class="dropdown-item" href="{{route('profile.index')}}">
                                 帳號設定
                             </a>
                             <a class="dropdown-item" href="{{ route('logout') }}"

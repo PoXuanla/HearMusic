@@ -29,8 +29,8 @@ class AddForeignKeysToMusicTable extends Migration
     {
         Schema::table('music', function (Blueprint $table) {
             //
-            $table->dropForeign('user_id');
-            $table->dropForeign('category_id');
+            $table->dropForeign(['user_id']);
+            $table->dropForeign(['category_id']);
 
 
         });

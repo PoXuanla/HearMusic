@@ -19,13 +19,17 @@ Route::get('/', 'MusicController@index')->name('home');
 
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
+
+    Route::namespace('AccountSetting')->prefix('accounts/manage')->group(function(){
+        Route::prefix('/profile')->group(function(){
+            Route::GET('/','BasicInformationController@index')->name('profile.index');
+            Route::PUT('/','BasicInformationController@update')->name('profile.update');
+
+        });
+    });
     Route::get('/{name}',function(){
         return view('/personalPage/main');
     })->name('personalPage');
-    Route::get('accounts/manage/profile/edit/',function(){
-       return view('/accountSetting/basicInformation/main');
-    })->name('accountSetting');
 });
-
 
 //Route::get('/home', 'HomeController@index')->name('home');
