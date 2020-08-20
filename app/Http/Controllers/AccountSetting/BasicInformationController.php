@@ -29,6 +29,7 @@ class BasicInformationController extends Controller
         $validated = $request->validated();
         $validated = (object)($validated);
         $user = User::find(Auth::user()->id);
+        $user->name = $validated->name;
         if (isset($validated->intro)) {
             $user->introduction = $validated->intro;
         } else {
