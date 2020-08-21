@@ -27,6 +27,18 @@ Route::middleware(['auth'])->group(function () {
 
         });
     });
+    Route::prefix('music/manage')->group(function(){
+        Route::GET('/likes/',function(){
+            return view('/musicFavorites/myMusicFavorites/likes/main');
+        })->name('manage.like');
+        Route::GET('/songs/upload',function(){
+            return view('/musicFavorites/myMusicFavorites/music/upload/main');
+        })->name('manage.songs.upload');
+        Route::GET('/songs/',function(){
+            return view('/musicFavorites/myMusicFavorites/music/main');
+        })->name('manage.songs');
+    });
+
     Route::get('/{name}',function(){
         return view('/personalPage/main');
     })->name('personalPage');

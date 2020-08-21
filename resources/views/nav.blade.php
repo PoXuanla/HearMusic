@@ -46,6 +46,9 @@
                             <a class="dropdown-item" href="{{url(Auth::user()->name)}}">
                                 個人頁面
                             </a>
+                            <a class="dropdown-item" href="{{route('manage.like')}}">
+                                我的音樂庫
+                            </a>
                             <a class="dropdown-item" href="{{route('profile.index')}}">
                                 帳號設定
                             </a>

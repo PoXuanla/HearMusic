@@ -32,18 +32,6 @@
                 帳號設定
             </strong>
         </h2>
-{{--        @if(session('success'))--}}
-{{--            <h1>{{session('success')}}</h1>--}}
-{{--        @endif--}}
-{{--        @if ($errors->any())--}}
-{{--            <div class="alert alert-danger">--}}
-{{--                <ul>--}}
-{{--                    @foreach ($errors->all() as $error)--}}
-{{--                        <li>{{ $error }}</li>--}}
-{{--                    @endforeach--}}
-{{--                </ul>--}}
-{{--            </div>--}}
-{{--        @endif--}}
         <hr class="mt-3 mb-5"/>
 
     </div>
