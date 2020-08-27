@@ -24,9 +24,9 @@ class Update extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'personImage' => 'image | max:20000',
-            'coverImage' => 'image | max:20000',
+            'name' => 'required | max:10',
+            'personImage' => 'image | max:200',
+            'coverImage' => 'image | max:200',
             'intro' => 'max:1000',
         ];
     }
@@ -36,10 +36,10 @@ class Update extends FormRequest
         return [
             "required" => "此欄位必須填寫",
             "image" => '必須是圖片',
+            "name.max" => '字數要在10個字以內',
             "personImage.max" => "圖片要小於2MB",
             "coverImage.max" => "圖片要小於2MB",
             "intro.max" => "字數要在1000字以內",
-
         ];
     }
 }

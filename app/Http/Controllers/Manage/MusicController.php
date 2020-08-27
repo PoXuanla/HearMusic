@@ -5,18 +5,25 @@ namespace App\Http\Controllers\Manage;
 use App\Http\Controllers\Controller;
 use App\Music;
 use App\MusicCategory;
+use App\Services\MusicService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use InvalidArgumentException;
+use Validator;
+use Redirect;
 use Image;
 use File;
 class MusicController extends Controller
 {
-    public function __construct(Request $request)
+    protected $musicService;
+    public function __construct(MusicService $musicService)
     {
-        $this->_request  = $request;
+        $this->musicService = $musicService;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -58,50 +65,67 @@ class MusicController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->_request->all();
-        //
-        $validatedData = $request->validate([
-            'mp3' => 'required|mimes:application/octet-stream,audio/mpeg,mpga,mp3,wav',
-            'songName' => 'required',
-            'songIntro' => 'required',
-            'lyrics' => 'required',
-            'img' => 'required|image | max:20000',
-            'category' => 'required',
-            'status' => 'required'
-        ]);
-
-        $validatedData = (object)$validatedData;
-//        return $validatedData->mp3->getClientOriginalExtension();
-        $music = new Music();
-        $music->user_id = Auth::user()->id;
-        $music->category_id = $validatedData->category;
-        $music->name = $validatedData->songName;
-        $music->introduction = $validatedData->songIntro;
-        $music->lyric = $validatedData->lyrics;
-        $music->status = $validatedData->status;
-
-        //upload img
-        if (isset($validatedData->img)) {
-            $name = uniqid(). '.jpg';
-            $img = Image::make($validatedData->img)
-                ->resize(800, 600)
-                ->encode('jpg');
-            Storage::disk('public')->put('musicImg/'.$name,$img);
-
-            $music->image = env('APP_URL').'/storage/musicImg/' . $name;
-        }
-        //handle MP3
-        $name = uniqid().'.mp3';
-        Storage::disk('public')->putFileAs('mp4',$validatedData->mp3,$name);
-        $music->mp3 =  env('APP_URL').'/storage/mp3/' . $name;
-
-        $music->save();
-
-
-
-
-
+         try{
+             $this->musicService->savePostData($request->all());
+         }catch (\Exception $e){
+             return redirect('music/manage/songs/create')->withErrors($e->getMessage());
+         }
         return redirect('music/manage/songs');
+//        $validatedData = $request->validate([
+//            'mp3' => 'required|mimes:application/octet-stream,audio/mpeg,mpga,mp3,wav',
+//            'songName' => 'required',
+//            'songIntro' => 'required',
+//            'lyrics' => 'required',
+//            'img' => 'required|image | max:20000',
+//            'category' => 'required',
+//            'status' => 'required'
+//        ]);
+//        $validator = Validator::make($request->all(), array(
+//            'mp3' => 'required|mimes:application/octet-stream,audio/mpeg,mpga,mp3,wav',
+//            'songName' => 'required',
+//            'songIntro' => 'required',
+//            'lyrics' => 'required',
+//            'img' => 'required|image | max:20000',
+//            'category' => 'required',
+//            'status' => 'required'
+//        ));
+//        if($validator->fails()) {
+//            return $validator;
+//            return Redirect::back()->withErrors($validator);
+//        }
+
+//        $validatedData = (object)$validatedData;
+////        return $validatedData->mp3->getClientOriginalExtension();
+//        $music = new Music();
+//        $music->user_id = Auth::user()->id;
+//        $music->category_id = $validatedData->category;
+//        $music->name = $validatedData->songName;
+//        $music->introduction = $validatedData->songIntro;
+//        $music->lyric = $validatedData->lyrics;
+//        $music->status = $validatedData->status;
+//
+//        //upload img
+//        if (isset($validatedData->img)) {
+//            $name = uniqid(). '.jpg';
+//            $img = Image::make($validatedData->img)
+//                ->resize(800, 600)
+//                ->encode('jpg');
+//            Storage::disk('public')->put('musicImg/'.$name,$img);
+//
+//            $music->image = env('APP_URL').'/storage/musicImg/' . $name;
+//        }
+//        //handle MP3
+//        $name = uniqid().'.mp3';
+//        Storage::disk('public')->putFileAs('mp4',$validatedData->mp3,$name);
+//        $music->mp3 =  env('APP_URL').'/storage/mp3/' . $name;
+//
+//        $music->save();
+//
+//
+//
+//
+//
+//        return redirect('music/manage/songs');
 
     }
 

@@ -25,7 +25,6 @@
 </head>
 <body>
 @include('nav')
-
 <div class="container-fluid">
     <div class="row w-75 mx-auto mt-5">
         <a href="{{url()->previous()}}" class="btn bg-white border shadow-sm">←返回管理音樂</a>
@@ -47,7 +46,12 @@
                         建議尺寸：500x500px 以上，圖片檔案大小不可超過 2MB
                     </small>
                     <label class="btn border" for="musicImageInput">
-                        <input id="musicImageInput" type="file" class="d-none" name="img" accept="image/*">
+                        <input type="file"
+                               id="musicImageInput"
+                               class="d-none"
+                               name="img"
+                               value="{{ old('img') }}"
+                               accept="image/*">
                         封面
                     </label>
 
@@ -59,7 +63,12 @@
                         <div class="alert alert-danger mt-3 mb-3">{{ $message }}</div>
                         @enderror
                     <label class="btn border" for="mp3">
-                        <input id="mp3"  type="file" class="d-none" name="mp3" accept="audio/mp3">
+                        <input type="file"
+                               id="mp3"
+                               class="d-none"
+                               name="mp3"
+                               value="{{ old('mp3') }}"
+                               accept="audio/mp3">
                         MP3
                     </label>
                     </div>
@@ -68,7 +77,12 @@
                         @error('songName')
                         <div class="alert alert-danger mt-3 mb-3">{{ $message }}</div>
                         @enderror
-                        <input type="text" name = "songName" class="form-control" id="inputSongName" placeholder="請輸入歌曲名稱">
+                        <input type="text"
+                               id="inputSongName"
+                               class="form-control"
+                               name = "songName"
+                               value="{{ old('songName') }}"
+                               placeholder="請輸入歌曲名稱">
                     </div>
 
                     <div class="form-row">
@@ -79,10 +93,9 @@
                             <textarea class="border w-100 rounded"
                                       name="songIntro"
                                       placeholder="請輸入歌曲介紹"
-                                      id=""
                                       cols="30" rows="10"
                                       style="resize: none;outline:none;"
-                            ></textarea>
+                            >{{ old('songIntro') }}</textarea>
                         </div>
                         <div class="form-group col-md-6 ">
                             @error('lyrics')
@@ -91,10 +104,9 @@
                                  <textarea class="border w-100 rounded"
                                            name="lyrics"
                                            placeholder="請輸入歌詞"
-                                           id=""
                                            cols="30" rows="10"
                                            style="resize: none;outline:none;"
-                                 ></textarea>
+                                 >{{ old('lyrics') }}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -104,20 +116,17 @@
                     </div>
                     <div class="form-row justify-content-around">
                         <div class="form-group col-md-6 w-100">
-                            <select class="custom-select custom-select-lg" name="category">
+                            <select class="custom-select custom-select-lg" name="category" value="{{ old('category') }}>
                                 @foreach ($musicCategories as $category)
-                                    @if ($loop->first)
-                                        <option value="{{$category->id}}" selected="selected">{{$category->name}}</option>
-                                    @endif
-                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                    <option {{ old('category') == $category->id ? "selected " : "" }} value="{{$category->id}}">{{$category->name}}</option>
                                 @endforeach
 
                             </select>
                         </div>
                         <div class="form-group col-md-6 w-100" >
                             <select class="custom-select custom-select-lg" name="status">
-                                <option value="1" selected="selected">狀態 : 公開</option>
-                                <option value="0">狀態 : 隱藏</option>
+                                <option {{ old('status') == 1 ? "selected " : ""  }}value="1">狀態 : 公開</option>
+                                <option {{ old('status') == 0 ? "selected " : ""  }}value="0">狀態 : 隱藏</option>
                             </select>
                         </div>
                     </div>
