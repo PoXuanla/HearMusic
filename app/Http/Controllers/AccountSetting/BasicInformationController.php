@@ -36,19 +36,23 @@ class BasicInformationController extends Controller
             $user->introduction = null;
         }
         if (isset($validated->personImage)) {
+
             $name = Auth::user()->account . '.jpg';
             $img = (string)Image::make($validated->personImage->getRealPath())
                 ->resize(360, 360)
-                ->encode('jpg')
-                ->save(public_path('/storage/personImage/' . $name));
+                ->encode('jpg');
+//                ->save(public_path('/storage/personImage/' . $name));
+            Storage::disk('public')->put('personImage/'.$name,$img);
             $user->personImage = env('APP_URL').'/storage/personImage/' . $name;
         }
         if (isset($validated->coverImage)) {
             $name = Auth::user()->account . '.jpg';
             $img = (string)Image::make($validated->coverImage->getRealPath())
                 ->resize(800, 600)
-                ->encode('jpg')
-                ->save(public_path('/storage/coverImage/' . $name));
+                ->encode('jpg');
+//                ->save(public_path('/storage/coverImage/' . $name));
+            Storage::disk('public')->put('coverImage/'.$name,$img);
+
             $user->coverImage = env('APP_URL').'/storage/coverImage/' . $name;
         }
         $user->save();

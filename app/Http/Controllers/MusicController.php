@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Music;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,7 @@ class MusicController extends Controller
         foreach ($TopTenMusic as $mu){
             $object = new \stdClass();
             $object->name = $mu->name;
+            $object->user_name = User::select('name')->where('id',$mu->user_id)->get()[0]->name;
             $object->image = $mu->image;
             array_push($musics,$object);
         }

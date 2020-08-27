@@ -16,14 +16,16 @@ class CreateMusicTable extends Migration
         Schema::create('music', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('introduction');
-            $table->string('mp3');
+            $table->string('mp3')->nullable();
             $table->string('lyric');
-            $table->integer('like');
+            $table->integer('like')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+
         });
     }
 

@@ -12,6 +12,9 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -32,7 +35,7 @@
                  <a class="nav-link" href="{{route('manage.like')}}">我的音樂庫</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" href="{{route('manage.songs')}}">管理音樂作品</a>
+                 <a class="nav-link" href="{{route('songs.index')}}">管理音樂作品</a>
              </li>
          </ul>
      </div>
@@ -43,7 +46,7 @@
             @yield('sideBar')
          </div>
 
-         <div class="rounded mb-3" style="width: 60%">
+         <div class="rounded mb-3 w-100">
              <div class="p-5">
                  @yield('content')
              </div>
