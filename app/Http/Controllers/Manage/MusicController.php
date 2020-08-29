@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Manage;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateMusicRequest;
+use App\Http\Requests\Manage\Music\Create;
 use App\Music;
 use App\MusicCategory;
 use App\Services\MusicService;
@@ -12,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
+
 use Validator;
 use Redirect;
 use Image;
@@ -61,14 +64,15 @@ class MusicController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response]
      */
-    public function store(Request $request)
+    public function store(CreateMusicRequest $request)
     {
-         try{
-             $this->musicService->savePostData($request->all());
+        $validated = $request->validated();
+        try{
+            $this->musicService->savePostData($validated);
          }catch (\Exception $e){
-             return redirect('music/manage/songs/create')->withErrors($e->getMessage());
+
          }
         return redirect('music/manage/songs');
 //        $validatedData = $request->validate([
@@ -93,7 +97,6 @@ class MusicController extends Controller
 //            return $validator;
 //            return Redirect::back()->withErrors($validator);
 //        }
-
 //        $validatedData = (object)$validatedData;
 ////        return $validatedData->mp3->getClientOriginalExtension();
 //        $music = new Music();
@@ -126,7 +129,6 @@ class MusicController extends Controller
 //
 //
 //        return redirect('music/manage/songs');
-
     }
 
     /**

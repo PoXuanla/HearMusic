@@ -5,24 +5,45 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>個人檔案</title>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+    <!-- Styles -->
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+    <!-- js -->
+    <script src="{{asset('js/PersonalPage/trackUser.js')}}"></script>
 </head>
 <body>
 @include('nav')
 
 <div class="container-fluid" style="padding: 0;">
-    <img style="height:25rem;width: 100%;object-fit: cover; "
-         src="https://images6.alphacoders.com/786/thumb-1920-786829.jpg" alt="Responsive image">
-    <div class="row w-75 mt-5 shadow " style="height:20rem;margin:0 auto;">
+    @if($object->user->coverImage)
+        <img style="height:25rem;width: 100%;object-fit: cover;" src="{{ $object->user->coverImage }}"
+             alt="Responsive image">
+    @else
+        <img style="height:25rem;width: 100%;object-fit: cover;"
+             src="https://images6.alphacoders.com/786/thumb-1920-786829.jpg" alt="Responsive image">
+    @endif
+    @if($object->user->id != Auth::user()->id)
+        <div  class="row w-75 mt-2 justify-content-end" style="height:3rem;margin:0 auto;">
+            @if($object->isTrack)
+            <button id="trackButton" class="btn btn-outline-danger" onclick='toggleTrack({{ Auth::user()->id }},{{ $object->user->id }})'>已追蹤</button>
+            @else
+                <button id="trackButton" class="btn btn-danger" onclick='toggleTrack({{ Auth::user()->id }},{{ $object->user->id }})'>追蹤</button>
+            @endif
+        </div>
+    @endif
+    <div class="row w-75 mt-2 shadow " style="height:20rem;margin:0 auto;">
         <div class="col-3 align-self-center">
-            @if(Auth::user()->personImage)
+            @if($object->user->personImage)
                 <img style="height:15rem;width: 15rem; object-fit: cover;"
-                     class="text-center rounded-circle mt-2 mb-2" src="{{Auth::user()->personImage}}"
+                     class="text-center rounded-circle mt-2 mb-2" src="{{$object->user->personImage}}"
                      alt="Card image cap">
             @else
                 <img style="height:15rem;width: 15rem; object-fit: cover;"
@@ -32,7 +53,7 @@
             @endif
         </div>
         <div class="col-6" style="height:20rem;">
-            <h2 class="mt-3">{{Auth::user()->name}}</h2>
+            <h2 class="mt-3">{{$object->user->name}}</h2>
             <hr class=""/>
 
             <div class="d-flex justify-content-start">
@@ -43,7 +64,7 @@
 text-overflow:ellipsis">
                 <strong>
                     <h3>
-                        {{Auth::user()->introduction}}
+                        {{$object->user->introduction}}
 
                     </h3>
 
@@ -61,7 +82,7 @@ text-overflow:ellipsis">
                     <div class="text-center">
                         <h2>
                             <strong>
-                                0
+                                {{ $object->musicQuantity }}
                             </strong>
 
                         </h2>
@@ -75,8 +96,9 @@ text-overflow:ellipsis">
                     </h5>
                     <div class="text-center">
                         <h2>
-                            <strong>
-                                0
+                            <strong id="fansQuantity">
+                                {{ $object->fansQuantity }}
+
                             </strong>
 
                         </h2>
@@ -124,7 +146,7 @@ text-overflow:ellipsis">
         <div class="shadow pt-3 pb-3" style="width: 60%;">
             <h3>還沒有任何動態</h3>
         </div>
-        <div >
+        <div>
 
         </div>
     </div>

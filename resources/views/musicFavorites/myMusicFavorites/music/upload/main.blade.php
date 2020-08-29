@@ -27,7 +27,7 @@
 @include('nav')
 <div class="container-fluid">
     <div class="row w-75 mx-auto mt-5">
-        <a href="{{url()->previous()}}" class="btn bg-white border shadow-sm">←返回管理音樂</a>
+        <a href="{{route('songs.index')}}" class="btn bg-white border shadow-sm">←返回管理音樂</a>
     </div>
     <div class="w-75 mx-auto mt-5 border shadow-sm rounded p-5">
         <form action="{{url('/music/manage/songs')}}" method="post" enctype="multipart/form-data">
