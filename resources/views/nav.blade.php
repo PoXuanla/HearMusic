@@ -43,7 +43,7 @@
                             {{Auth::user()->name}}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{url(Auth::user()->name)}}">
+                            <a class="dropdown-item" href="{{url(Auth::user()->account)}}">
                                 個人頁面
                             </a>
                             <a class="dropdown-item" href="{{route('manage.like')}}">

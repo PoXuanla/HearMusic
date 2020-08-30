@@ -18,6 +18,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- js -->
     <script src="{{asset('js/PersonalPage/trackUser.js')}}"></script>
+    <!-- APP_URL -->
+    <script>
+        var APP_URL = "{{ env("APP_URL") }}"
+    </script>
 </head>
 <body>
 @include('nav')
