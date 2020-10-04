@@ -1,10 +1,64 @@
+const mediaData = [
+    {
+        author: 'Freedom Trail Studio',
+        authorUrl: 'https://www.youtube.com/channel/UCx6kpgiQkDkN1UnK5GaATGw',
+        fileName: 'Swing Theory',
+        fileUrl: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/Swing_Theory.mp3',
+        thumb: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/15367448967_0551dce9c1_q.jpg',
+    },
+    {
+        author: 'Huma-Huma',
+        authorUrl: '',
+        fileName: "It's All Happening",
+        fileUrl: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/It_s_All_Happening.mp3',
+        thumb: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/34347642316_fe2f354cfd_q.jpg',
+    },
+    {
+        author: 'Danny Kean/Doug Maxwell',
+        authorUrl: 'https://www.youtube.com/channel/UCwhJTv7O8EmDwyvqMBLHcHg',
+        fileName: "So Smooth",
+        fileUrl: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/So_Smooth.mp3',
+        thumb: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/36981460496_80c2c2bce5_q.jpg',
+    },
+    {
+        author: 'Silent Partner',
+        authorUrl: '',
+        fileName: "Sinking Ship",
+        fileUrl: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/Sinking_Ship.mp3',
+        thumb: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/38552225096_84b69eb7aa_q.jpg',
+    },
+    {
+        author: 'Jimmy Fontanez/Doug Maxwell',
+        authorUrl: 'https://www.youtube.com/channel/UCwhJTv7O8EmDwyvqMBLHcHg',
+        fileName: "Trap Unboxing",
+        fileUrl: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/Trap_Unboxing.mp3',
+        thumb: 'https://s3-ap-northeast-1.amazonaws.com/dazedbear-assets/custom-audio-player/41451305061_f0bd9717be_q.jpg',
+    },
+];
+
+// 格式化秒數
+const formatTime = sec => {
+    const fillZero = num => num < 10 ? `0${num}` : num;
+
+    // FIXME:
+    const hour = Math.floor(sec/3600)
+    const minute = Math.floor((sec%3600)/60)
+    const secs = Math.floor(sec - 3600*hour - 60*minute)
+    return (hour > 0)
+        ? `${fillZero(hour)}:${fillZero(minute)}:${fillZero(secs)}`
+        : `${fillZero(minute)}:${fillZero(secs)}`
+}
+
+/**
+ * 播放器功能
+ */
 class AudioPlayer {
     constructor(playlist) {
         this.audioPlayer = new Audio();
 
         this.playList = playlist || [];
         this.playMode = 'step';
-        this.currentIdx = 0 ;
+        this.currentIdx = 0;
         this.isPlaying = false;
         // internal: volume
         // internal: duration
@@ -20,33 +74,33 @@ class AudioPlayer {
         this.event = {
             current: new Event("currentmusicchange"),
             playMode: new Event("playmodechange"),
-            playList: new Event("playlistchange"),
+            playList: new Event("
+            "),
             isPlaying: new Event("playstatuschange"),
         }
 
-        // 讀取完成自動播放
-        this.audioPlayer.addEventListener('canplay', () => this.isPlaying ? this.audioPlayer.play() : this.audioPlayer.pause())
+        // 換歌時讀到歌曲總時間才算完成更換
+        this.audioPlayer.addEventListener('durationchange', () => {
+            this.audioPlayer.dispatchEvent(this.event.current)
+        })
 
-        // 播放狀態
-        this.audioPlayer.addEventListener('play', () => this.setPlayStatus(true))
-        // this.audioPlayer.addEventListener('pause', () => this.setPlayStatus(false))
-        this.audioPlayer.addEventListener('abort', () => this.setPlayStatus(false))
+        // 換歌時判斷是否繼續播放
+        this.audioPlayer.addEventListener('currentmusicchange', () => {
+            this.isPlaying ? this.audioPlayer.play() : this.audioPlayer.pause()
+        })
+
+        // 錯誤狀態停止播放
+        this.audioPlayer.addEventListener('playing', () => this.setPlayStatus(true))
+        this.audioPlayer.addEventListener('waiting', () => this.setPlayStatus(false))
         this.audioPlayer.addEventListener('error', () => this.setPlayStatus(false))
-        // this.audioPlayer.addEventListener('emptied', () => this.setPlayStatus(false))
         this.audioPlayer.addEventListener('stalled', () => this.setPlayStatus(false))
 
         // 自動播下一首
         this.audioPlayer.addEventListener('ended', () => {
             const nextIdx = this.getNextMusicIdx();
+            const stopWhenReachPlaylistEnd = (this.playMode === 'step' && nextIdx === 0)
             this.setCurrentMusic(nextIdx);
-            if (this.playMode === 'step' && nextIdx === 0) {
-                this.togglePlay(false);
-            }
-        })
-
-        // 換歌時讀到歌曲總時間才算完成更換
-        this.audioPlayer.addEventListener('durationchange', () => {
-            this.audioPlayer.dispatchEvent(this.event.current)
+            this.setPlayStatus(!stopWhenReachPlaylistEnd);
         })
     }
 
@@ -191,3 +245,182 @@ class AudioPlayer {
         return this.isPlaying;
     }
 }
+
+/**
+ * UI 互動
+ */
+$(document).ready(() => {
+    // DOM elements
+    const playBtn = $('#play')  // play_arrow, pause
+    const prevBtn = $('#prev')
+    const nextBtn = $('#next')
+    const shuffleBtn = $('#shuffle')
+    const repeatBtn = $('#repeat')  // repeat, repeat_one
+    const volumeBtn = $('#volume')
+    const volumeWrapper = $('#volume-wrapper')
+    const queueBtn = $('#queue')
+    const queueCloseBtn = $('#queue-close')
+    const queueWrapper = $('#queue-wrapper')
+    const timelineBg = $('#timeline-bg')
+    const timelineBar = $('#timeline-bar')
+    const timelineHandle = $('#timeline-handle')
+    const passtime = $('#passtime')
+    const duration = $('#duration')
+    const volumeBg = $('#volume_bg')
+    const volumeBar = $('#volume_bar')
+    const volumeHandle = $('#volume_handle')
+
+    // 歌曲資訊元件
+    const MusicInfo = (info, idx) => {
+        return `
+			<div class="info">
+				<img class="info__thumb" src="${info.thumb}"/>
+				<div class="info__wrapper">
+					<p class="info__author" title="${info.author || 'Author'}">${info.author || 'Author'}</p>
+					<span class="info__name">${info.fileName || 'Song Name'}</span>
+				</div>
+			</div>
+		`;
+    }
+
+    // 播放清單
+    const renderPlaylist = playlist => {
+        $('#playlist').html(mediaData.map((musicInfo, idx) => `<div id="queue-item-${idx}" class="queue__item">${MusicInfo(musicInfo)}</div>`))
+
+        $('#playlist .queue__item').click(function() {
+            const idx = parseInt($(this).attr('id').replace("queue-item-", ''));
+            myAudio.setCurrentMusic(idx)
+        });
+    }
+
+    // 當前播放歌曲資訊
+    const renderCurrent = (info, currentTime, duration) => {
+        $('#current-thumb').attr('src', info.thumb)
+        $('#current-author').attr('href', info.authorUrl || '#')
+        $('#current-author').html(info.author || 'Author')
+        $('#current-name').html(info.fileName || 'Song Name')
+        $('#passtime').html(formatTime(currentTime))
+        $('#duration').html(formatTime(duration))
+    }
+
+    const myAudio = new AudioPlayer(mediaData);
+    const timelineBarTotalLength = 250;
+    const volumeBarTotalLength = 100;
+
+
+    // 監聽事件顯示 UI
+    myAudio.on('playstatuschange', () => playBtn.html(myAudio.getIsPlaying() ? 'pause' : 'play_arrow'))
+    myAudio.on('playmodechange', () => {
+        switch(myAudio.playMode) {
+            case 'step': {
+                shuffleBtn.removeClass('select')
+                repeatBtn.removeClass('select')
+                repeatBtn.html('repeat')
+                break;
+            }
+            case 'shuffle': {
+                shuffleBtn.addClass('select')
+                repeatBtn.removeClass('select')
+                repeatBtn.html('repeat')
+                break;
+            }
+            case 'repeat-one': {
+                shuffleBtn.removeClass('select')
+                repeatBtn.addClass('select')
+                repeatBtn.html('repeat_one')
+                break;
+            }
+            case 'repeat-all': {
+                shuffleBtn.removeClass('select')
+                repeatBtn.addClass('select')
+                repeatBtn.html('repeat')
+                break;
+            }
+            default:
+                return;
+        }
+    })
+    myAudio.on('currentmusicchange', () => {
+        const currentTime = myAudio.getCurrentTime()
+        const duration = myAudio.getDuration()
+        renderCurrent(myAudio.getMediaInfo(), myAudio.getCurrentTime(), myAudio.getDuration());
+        passtime.html(formatTime(currentTime))
+        timelineBar.width(`${(currentTime / duration) * timelineBarTotalLength}px`)
+        timelineHandle.css('left', `${(currentTime / duration) * timelineBarTotalLength}px`);
+    })
+    myAudio.on('timeupdate', () => {
+        const currentTime = myAudio.getCurrentTime()
+        const duration = myAudio.getDuration()
+        passtime.html(formatTime(currentTime))
+        timelineBar.width(`${(currentTime / duration) * timelineBarTotalLength}px`)
+        timelineHandle.css('left', `${(currentTime / duration) * timelineBarTotalLength}px`);
+    })
+    myAudio.on('volumechange', () => volumeBar.height(`${myAudio.getVolume() * volumeBarTotalLength}px`))
+
+    // 播放 or 停止
+    playBtn.click(() => myAudio.togglePlay())
+
+    // 上一首歌 or 下一首歌
+    prevBtn.click(() => myAudio.setCurrentMusic(myAudio.getNextMusicIdx('prev')))
+    nextBtn.click(() => myAudio.setCurrentMusic(myAudio.getNextMusicIdx('next')))
+
+    // shuffle 播放開關
+    shuffleBtn.click(() => myAudio.setPlayMode((myAudio.getPlayMode() === 'shuffle') ? 'step' : 'shuffle'))
+
+    // repeat 播放開關
+    repeatBtn.click(() => {
+        const playMode = myAudio.getPlayMode();
+        if (playMode === 'repeat-one') {
+            myAudio.setPlayMode('step')
+        } else if (playMode === 'repeat-all') {
+            myAudio.setPlayMode('repeat-one')
+        } else {
+            myAudio.setPlayMode('repeat-all')
+        }
+    })
+
+    // 播放清單開關
+    queueBtn.click(() => {
+        queueWrapper.removeClass('hidden')
+        queueBtn.addClass('select')
+    });
+
+    queueCloseBtn.click(() => {
+        queueWrapper.addClass('hidden')
+        queueBtn.removeClass('select')
+    });
+
+    // 音量調整面板
+    volumeBtn.on('mouseenter', () => volumeWrapper.removeClass('hidden'))
+    volumeWrapper.on('mouseleave', () => volumeWrapper.addClass('hidden'))
+
+    // 拖動時間軸
+    timelineHandle.draggable({
+        axis: "x",
+        containment: timelineBg,
+        start: (event, ui) => myAudio.togglePlay(false),
+        drag: (event, ui) => {
+            const nextSec = Math.floor(ui.position.left * (myAudio.getDuration() / timelineBarTotalLength));
+            passtime.html(formatTime(nextSec));
+            timelineBar.width(`${ui.position.left}px`)
+        },
+        stop: (event, ui) => {
+            const nextSec = Math.floor(ui.position.left * (myAudio.getDuration() / timelineBarTotalLength));
+            myAudio.setCurrentTime(nextSec);
+            myAudio.togglePlay(true);
+        }
+    })
+
+    // 調整音量
+    volumeHandle.draggable({
+        axis: "y",
+        containment: volumeBg,
+        drag: (event, ui) => {
+            const vol = volumeBarTotalLength - ui.position.top;
+            volumeBar.height(`${vol}px`);
+            myAudio.setVolume(vol);
+        }
+    })
+
+    renderPlaylist(mediaData);
+});

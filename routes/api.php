@@ -21,7 +21,11 @@ Route::namespace('Api')->group(function(){
     Route::GET('/fan','FanController@index');
     Route::post('/fan','FanController@create');
     Route::DELETE('/fan','FanController@destroy');
-
+    Route::resource('newComment', 'NewsCommentController', ['only' => [
+        'index','store', 'destroy'
+    ]]);
+    Route::resource('/song/comment','SongCommentController');
+    Route::GET('/playingMusicList','PlayMusicController@show');
 });
 
 

@@ -11,7 +11,7 @@
         </div>
         <div>
             <button class="btn btn-dark"><i class="fas fa-heart"></i><span style="padding-left: 10px;">0</span></button>
-            <button class="btn btn-danger"><i class="fas fa-play-circle"></i></button>
+            <button class="btn btn-danger playMusic" data-id="{{$value->id}}"><i class="fas fa-play-circle"></i></button>
         </div>
 
 

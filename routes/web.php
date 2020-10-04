@@ -19,7 +19,6 @@ Route::get('/', 'MusicController@index')->name('home');
 
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
-
     Route::namespace('AccountSetting')->prefix('accounts/manage')->group(function(){
         Route::prefix('/profile')->group(function(){
             Route::GET('/','BasicInformationController@index')->name('profile.index');
@@ -33,10 +32,12 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('songs', 'MusicController');
 
     });
+    Route::get('/song/{song_id}','SongController@index')->name('song.index');
     Route::get('/{account}','PersonalFileController@index')->name('personalPage');
+});
+
 //    Route::get('/{name}',function(){
 //        return view('/personalPage/main');
 //    })->name('personalPage');
-});
 
 //Route::get('/home', 'HomeController@index')->name('home');

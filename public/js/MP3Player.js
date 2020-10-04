@@ -39,7 +39,7 @@ class MP3Player{
         }
     }
     CurrentProgressPrecent(){
-        let player_progress = (this.audio.currentTime/this.audio.duration)*100 + '%';
+        let player_progress = (this.audio.currentTime/this.audio.duration)*100;
         return player_progress;
     }
 

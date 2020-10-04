@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Music;
+use App\Http\Controllers\Controller;
+use App\PersonalNewsComment;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-class MusicController extends Controller
+class NewsCommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,18 +16,6 @@ class MusicController extends Controller
      */
     public function index()
     {
-        //
-        $TopTenMusic = Music::all();
-        $musics = array();
-        foreach ($TopTenMusic as $mu){
-            $object = new \stdClass();
-            $object->name = $mu->name;
-            $object->user_name = User::select('name')->where('id',$mu->user_id)->get()[0]->name;
-            $object->image = $mu->image;
-            $object->id = $mu->id;
-            array_push($musics,$object);
-        }
-        return view('home/index',compact('musics'));
     }
 
     /**
@@ -49,6 +37,18 @@ class MusicController extends Controller
     public function store(Request $request)
     {
         //
+        $comment = new PersonalNewsComment();
+        $comment->user_id = $request->user_id;
+        $comment->personal_news_id = $request->post_id;
+        $comment->content = $request->message;
+        $comment->save();
+
+        $data = new \stdClass();
+        $user  = User::find($request->user_id);
+        $data->image = $user->personImage;
+        $data->name = $user->name;
+        return response()->json($data);
+
     }
 
     /**

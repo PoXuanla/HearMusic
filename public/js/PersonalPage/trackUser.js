@@ -1,4 +1,4 @@
-    function toggleTrack(id,userId) {
+function toggleTrack(id,userId) {
         //fan text
         var dataJSON = {};
         dataJSON["id"] = id;
